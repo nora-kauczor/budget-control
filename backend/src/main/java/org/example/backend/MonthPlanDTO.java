@@ -4,9 +4,7 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
-
-public record monthPlan(
-        String user,
+public record MonthPlanDTO(
         YearMonth yearMonth,
         double totalBudget,
         double totalLeftover,
