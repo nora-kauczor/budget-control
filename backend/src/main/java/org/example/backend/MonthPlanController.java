@@ -1,8 +1,7 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,22 +12,27 @@ public class MonthPlanController {
 
     private final MonthPlanService monthPlanService;
 
-    public MonthPlan getMonthPlanOfUser(String id) {
+    @GetMapping("/{id}")
+    public MonthPlan getMonthPlanOfUser(@PathVariable String id) {
         return monthPlanService.getMonthPlanOfUser(id);
     }
 
+    @GetMapping
     public List<MonthPlan> getAllMonthPlansOfUser() {
         return monthPlanService.getAllMonthPlansOfUser();
     }
 
+    @PostMapping
     public MonthPlan createMonthPlan(MonthPlanDTO monthPlanDTO) {
         return monthPlanService.createMonthPlan(monthPlanDTO);
     }
 
+    @PutMapping
     public MonthPlan editMonthPlan(MonthPlan editedMonthPlan){
         return monthPlanService.editMonthPlan(editedMonthPlan);
     }
 
+    @DeleteMapping
     public String deleteMonthPlan(String id){
         return monthPlanService.deleteMonthPlan(id);
     }
