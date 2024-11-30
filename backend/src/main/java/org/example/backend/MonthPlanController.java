@@ -32,8 +32,8 @@ public class MonthPlanController {
         return monthPlanService.editMonthPlan(editedMonthPlan);
     }
 
-    @DeleteMapping
-    public String deleteMonthPlan(String id){
+    @DeleteMapping("/{id}")
+    public String deleteMonthPlan(@PathVariable String id){
         return monthPlanService.deleteMonthPlan(id);
     }
 }
