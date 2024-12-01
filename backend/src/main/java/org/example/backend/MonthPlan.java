@@ -1,5 +1,7 @@
 package org.example.backend;
 
+import lombok.Data;
+
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -14,4 +16,6 @@ public record MonthPlan(
         List<Transaction> transactions
 ) {
 }
+
+
 

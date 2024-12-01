@@ -59,7 +59,7 @@ class MonthPlanControllerTest {
                         """
                                [{"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlanMap": [],"transactions": []}]
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}]
                                """
                 ));
     }
@@ -71,7 +71,7 @@ class MonthPlanControllerTest {
                         .content("""
                                {"yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlanMap": [],"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
                                """)
                 )
                 .andExpect(status().isOk())
@@ -79,7 +79,7 @@ class MonthPlanControllerTest {
                         """
                                {"user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlanMap": [],"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());
@@ -92,7 +92,7 @@ class MonthPlanControllerTest {
                         .content("""
                                {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlanMap": [],"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
                                """)
                 )
                 .andExpect(status().isOk())
@@ -100,7 +100,7 @@ class MonthPlanControllerTest {
                         """
                                {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlanMap": [],"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());

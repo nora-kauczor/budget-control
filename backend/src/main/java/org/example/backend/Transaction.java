@@ -6,7 +6,7 @@ public
 
 record Transaction (
         String id,
-        Timestamp timestamp,
+        String timestamp,
         String user,
         double amount,
         String note,

@@ -23,12 +23,13 @@ public class MonthPlanController {
     }
 
     @PostMapping
-    public MonthPlan createMonthPlan(MonthPlanDTO monthPlanDTO) {
+    public MonthPlan createMonthPlan(@RequestBody MonthPlanDTO monthPlanDTO) {
         return monthPlanService.createMonthPlan(monthPlanDTO);
     }
 
     @PutMapping
-    public MonthPlan editMonthPlan(MonthPlan editedMonthPlan){
+    public MonthPlan editMonthPlan(@RequestBody MonthPlan editedMonthPlan){
+        System.out.println("from controller: "+editedMonthPlan);
         return monthPlanService.editMonthPlan(editedMonthPlan);
     }
 

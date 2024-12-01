@@ -27,6 +27,7 @@ public class MonthPlanService {
     }
 
     public MonthPlan editMonthPlan(MonthPlan editedMonthPlan){
+        System.out.println(editedMonthPlan);
         return monthPlanRepo.save(editedMonthPlan);
     }
 
