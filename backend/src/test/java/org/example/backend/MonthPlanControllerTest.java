@@ -30,10 +30,10 @@ class MonthPlanControllerTest {
     @BeforeEach
     void setUp() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                YearMonth.of(2024,12), 3000.00,
+                "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         repo.save(testMonthPlan);
-        MonthPlanDTO testDTO = new MonthPlanDTO (YearMonth.of(2024,12), 3000.00,
+        MonthPlanDTO testDTO = new MonthPlanDTO ("2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
     }
 
@@ -45,7 +45,7 @@ class MonthPlanControllerTest {
                         """
                                 {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlanMap": [],"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
                                 """
                 ));
 

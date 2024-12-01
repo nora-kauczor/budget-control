@@ -18,7 +18,7 @@ class MonthPlanServiceTest {
     @Test
     void getMonthPlanOfUser() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                YearMonth.of(2024,12), 3000.00,
+                "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
         assertEquals(testMonthPlan, monthPlanService.getMonthPlanOfUser("123"));
@@ -27,7 +27,7 @@ class MonthPlanServiceTest {
     @Test
     void getAllMonthPlansOfUser() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                YearMonth.of(2024,12), 3000.00,
+                "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.findAll()).thenReturn(List.of(testMonthPlan));
         assertEquals(List.of(testMonthPlan), monthPlanService.getAllMonthPlansOfUser());
@@ -35,10 +35,10 @@ class MonthPlanServiceTest {
 
     @Test
     void createMonthPlan() {
-        MonthPlanDTO testDTO = new MonthPlanDTO(YearMonth.of(2024,12), 3000.00,
+        MonthPlanDTO testDTO = new MonthPlanDTO("2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                YearMonth.of(2024,12), 3000.00,
+                "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.save(any(MonthPlan.class))).thenReturn(testMonthPlan);
         assertEquals(testMonthPlan, monthPlanService.createMonthPlan(testDTO));
@@ -47,7 +47,7 @@ class MonthPlanServiceTest {
     @Test
     void editMonthPlan() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                YearMonth.of(2024,12), 3000.00,
+                "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.save(testMonthPlan)).thenReturn(testMonthPlan);
         assertEquals(testMonthPlan, monthPlanService.editMonthPlan(testMonthPlan));
@@ -56,7 +56,7 @@ class MonthPlanServiceTest {
     @Test
     void deleteMonthPlan() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                YearMonth.of(2024,12), 3000.00,
+                "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         String deletionMessage = "Month plan successfully deleted.";
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));

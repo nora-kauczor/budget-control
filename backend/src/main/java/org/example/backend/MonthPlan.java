@@ -7,7 +7,7 @@ import java.util.Map;
 public record MonthPlan(
         String id,
         String user,
-        YearMonth yearMonth,
+        String yearMonth,
         double totalBudget,
         double totalLeftover,
         Map<String, CategoryPlan> categoryPlanMap,
