@@ -10,7 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,8 +32,6 @@ class MonthPlanControllerTest {
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         repo.save(testMonthPlan);
-        MonthPlanDTO testDTO = new MonthPlanDTO ("2024-12", 3000.00,
-                2000.00, new HashMap<>(), List.of());
     }
 
     @Test
@@ -77,7 +74,7 @@ class MonthPlanControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """
-                               {"user": "000", "yearMonth":
+                               {"yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
                                                "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
                                """
