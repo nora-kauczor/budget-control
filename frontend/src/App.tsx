@@ -39,7 +39,7 @@ function App() {
     //         console.error("Error fetching data:", error);
     //     })}
 
-    return (<div>
+    return (<div id={"app"}>
     <Header/>
     <HomePage/>
         <p>current user:{user}</p>
