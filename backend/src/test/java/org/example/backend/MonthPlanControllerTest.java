@@ -35,11 +35,12 @@ class MonthPlanControllerTest {
         repo.save(testMonthPlan);
     }
 
+
     @Test
-    void getMonthPlanOfUser() throws Exception {
+    void getMonthPlan_shouldReturn200AndMonthPLan_whenCalledByItsIdAndItsCreator() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/budget/123")
                         .with(oauth2Login().attributes(attributes -> {
-            attributes.put("name", "jane-doe");
+            attributes.put("sub", "000");
         })))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
@@ -53,8 +54,20 @@ class MonthPlanControllerTest {
     }
 
     @Test
-    void getAllMonthPlansOfUser() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/budget"))
+    void getMonthPlan_shouldReturn403_whenCalledByOtherUser() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/budget/123")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "111");
+                        })))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void getAllMonthPlans_shouldReturn200AndAllMonthPlansOfUser_whenCalledByHim() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/budget")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "000");
+                        })))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """
@@ -68,6 +81,9 @@ class MonthPlanControllerTest {
     @Test
     void createMonthPlan() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/budget")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "000");
+                        }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                {"yearMonth":
@@ -87,8 +103,11 @@ class MonthPlanControllerTest {
     }
 
     @Test
-    void editMonthPlan() throws Exception {
+    void editMonthPlan_shouldReturn200AndEditedMonthPlan_whenCalledWithEditedMonthPlanAndByTheCreator() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/api/budget")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "000");
+                        }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                {"id": "123", "user": "000", "yearMonth":
@@ -108,9 +127,37 @@ class MonthPlanControllerTest {
     }
 
     @Test
-    void deleteMonthPlan() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/budget/123"))
+    void editMonthPlan_shouldReturn403_whenCalledByOtherUser() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/budget")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "111");
+                        }))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                               {"id": "123", "user": "000", "yearMonth":
+                                                "2024-12", "totalBudget": 3000.00,
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
+                               """)
+                )
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deleteMonthPlan_shouldReturn200AndConfirmationMessage_whenCalledByCreatorAndWithExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/api/budget/123")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "000");
+                        })))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Month plan successfully deleted."));
+    }
+
+    @Test
+    void deleteMonthPlan_shouldReturn403_whenCalledByOtherUser() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/api/budget/123")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "111");
+                        })))
+                .andExpect(status().isForbidden());
     }
 }

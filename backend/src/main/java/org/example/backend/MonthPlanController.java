@@ -1,6 +1,7 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class MonthPlanController {
     private final MonthPlanService monthPlanService;
 
     @GetMapping("/{id}")
-    public MonthPlan getMonthPlan(@AuthenticationPrincipal OAuth2User user, @PathVariable String id) {
+    public MonthPlan getMonthPlan(@AuthenticationPrincipal OAuth2User user, @PathVariable String id) throws UserIsNotAuthorizedException {
         return monthPlanService.getMonthPlan(user.getName(), id);
     }
 
@@ -30,12 +31,12 @@ public class MonthPlanController {
     }
 
     @PutMapping
-    public MonthPlan editMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlan editedMonthPlan){
+    public MonthPlan editMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlan editedMonthPlan) throws UserIsNotAuthorizedException {
         return monthPlanService.editMonthPlan(user.getName(), editedMonthPlan);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteMonthPlan(@AuthenticationPrincipal OAuth2User user, @PathVariable String id){
+    public String deleteMonthPlan(@AuthenticationPrincipal OAuth2User user, @PathVariable String id) throws UserIsNotAuthorizedException {
         return monthPlanService.deleteMonthPlan(user.getName(), id);
     }
 }

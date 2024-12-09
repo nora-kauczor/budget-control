@@ -1,6 +1,7 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,11 +11,12 @@ public class MonthPlanService {
 
     private final MonthPlanRepo monthPlanRepo;
 
-    public MonthPlan getMonthPlan(String user, String id) {
+    public MonthPlan getMonthPlan(String user, String id) throws UserIsNotAuthorizedException {
         MonthPlan monthPlan = monthPlanRepo.findById(id).orElseThrow();
         if (monthPlan.user().equals(user)) {return monthPlan;}
-        return null;
-    }
+        else {throw new UserIsNotAuthorizedException("User is not authorized.");}
+        }
+
 
     public List<MonthPlan> getAllMonthPlans(String user) {
         return monthPlanRepo.findByUser(user);
@@ -28,23 +30,23 @@ public class MonthPlanService {
         return monthPlanRepo.save(newMonthPlan);
     }
 
-    public MonthPlan editMonthPlan(String user, MonthPlan editedMonthPlan){
+    public MonthPlan editMonthPlan(String user, MonthPlan editedMonthPlan) throws UserIsNotAuthorizedException {
         String authorOfMonthPlan= monthPlanRepo.findById(editedMonthPlan.id()).orElseThrow().user();
         if (authorOfMonthPlan.equals(user))
         {
             return monthPlanRepo.save(editedMonthPlan);
-        };
-        return null;
+        }
+        else {throw new UserIsNotAuthorizedException("User is not authorized.");}
     }
 
-    public String deleteMonthPlan(String user, String id){
+    public String deleteMonthPlan(String user, String id) throws UserIsNotAuthorizedException {
         String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow().user();
         if (authorOfMonthPlan.equals(user))
         {
             monthPlanRepo.deleteById(id);
             return "Month plan successfully deleted.";
-        };
-        return "Couldn't delete month plan";
+        }
+        else {throw new UserIsNotAuthorizedException("User is not authorized.");}
     }
 
 }

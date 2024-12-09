@@ -1,5 +1,6 @@
 package org.example.backend;
 
+import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ class MonthPlanServiceTest {
     private final MonthPlanService monthPlanService = new MonthPlanService(mockedRepo);
 
     @Test
-    void getMonthPlanOfUser() {
+    void getMonthPlanOfUser() throws UserIsNotAuthorizedException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
@@ -44,7 +45,7 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    void editMonthPlan() {
+    void editMonthPlan_shouldReturnMonthPLan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
@@ -54,7 +55,7 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    void deleteMonthPlan() {
+    void deleteMonthPlan() throws UserIsNotAuthorizedException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());

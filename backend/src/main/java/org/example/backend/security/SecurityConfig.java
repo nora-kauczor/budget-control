@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/budget").authenticated()
-//                        .requestMatchers("/api/budget/**").permitAll()
+                        .requestMatchers("/api/budget/**").authenticated()
                         .anyRequest().permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(
                         SessionCreationPolicy.ALWAYS
