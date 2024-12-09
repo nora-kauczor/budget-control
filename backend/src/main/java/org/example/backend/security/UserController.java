@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/name")
-    public AppUser getUserName(@AuthenticationPrincipal OAuth2User user) {
+    public AppUser getUserObject(@AuthenticationPrincipal OAuth2User user) {
         if
         ( user == null) {
             return new AppUser("NotFound", "", null, null);

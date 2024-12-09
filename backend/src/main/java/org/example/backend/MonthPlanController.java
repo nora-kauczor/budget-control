@@ -29,7 +29,6 @@ public class MonthPlanController {
 
     @PutMapping
     public MonthPlan editMonthPlan(@RequestBody MonthPlan editedMonthPlan){
-        System.out.println("from controller: "+editedMonthPlan);
         return monthPlanService.editMonthPlan(editedMonthPlan);
     }
 
