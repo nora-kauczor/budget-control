@@ -10,30 +10,41 @@ public class MonthPlanService {
 
     private final MonthPlanRepo monthPlanRepo;
 
-    public MonthPlan getMonthPlanOfUser(String id) {
-        return monthPlanRepo.findById(id).orElseThrow();
+    public MonthPlan getMonthPlan(String user, String id) {
+        MonthPlan monthPlan = monthPlanRepo.findById(id).orElseThrow();
+        if (monthPlan.user().equals(user)) {return monthPlan;}
+        return null;
     }
 
-    public List<MonthPlan> getAllMonthPlansOfUser() {
-        return monthPlanRepo.findAll();
+    public List<MonthPlan> getAllMonthPlans(String user) {
+        return monthPlanRepo.findByUser(user);
     }
 
-    public MonthPlan createMonthPlan(MonthPlanDTO monthPlanDTO) {
-        MonthPlan newMonthPlan = new MonthPlan(null, null,
+    public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) {
+        MonthPlan newMonthPlan = new MonthPlan(null, user,
                 monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
                 monthPlanDTO.totalLeftover(), monthPlanDTO.categoryPlanMap(),
                 monthPlanDTO.transactions());
         return monthPlanRepo.save(newMonthPlan);
     }
 
-    public MonthPlan editMonthPlan(MonthPlan editedMonthPlan){
-        System.out.println(editedMonthPlan);
-        return monthPlanRepo.save(editedMonthPlan);
+    public MonthPlan editMonthPlan(String user, MonthPlan editedMonthPlan){
+        String authorOfMonthPlan= monthPlanRepo.findById(editedMonthPlan.id()).orElseThrow().user();
+        if (authorOfMonthPlan.equals(user))
+        {
+            return monthPlanRepo.save(editedMonthPlan);
+        };
+        return null;
     }
 
-    public String deleteMonthPlan(String id){
-        monthPlanRepo.deleteById(id);
-        return "Month plan successfully deleted.";
+    public String deleteMonthPlan(String user, String id){
+        String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow().user();
+        if (authorOfMonthPlan.equals(user))
+        {
+            monthPlanRepo.deleteById(id);
+            return "Month plan successfully deleted.";
+        };
+        return "Couldn't delete month plan";
     }
 
 }

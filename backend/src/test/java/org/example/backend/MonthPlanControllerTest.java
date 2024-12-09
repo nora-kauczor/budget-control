@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -36,7 +37,10 @@ class MonthPlanControllerTest {
 
     @Test
     void getMonthPlanOfUser() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/budget/123"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/budget/123")
+                        .with(oauth2Login().attributes(attributes -> {
+            attributes.put("name", "jane-doe");
+        })))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """

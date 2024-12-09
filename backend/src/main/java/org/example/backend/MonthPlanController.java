@@ -15,27 +15,27 @@ public class MonthPlanController {
     private final MonthPlanService monthPlanService;
 
     @GetMapping("/{id}")
-    public MonthPlan getMonthPlanOfUser(@AuthenticationPrincipal OAuth2User user, @PathVariable String id) {
-        return monthPlanService.getMonthPlanOfUser(user, id);
+    public MonthPlan getMonthPlan(@AuthenticationPrincipal OAuth2User user, @PathVariable String id) {
+        return monthPlanService.getMonthPlan(user.getName(), id);
     }
 
     @GetMapping
-    public List<MonthPlan> getAllMonthPlansOfUser(@AuthenticationPrincipal OAuth2User user) {
-        return monthPlanService.getAllMonthPlansOfUser(user);
+    public List<MonthPlan> getAllMonthPlans(@AuthenticationPrincipal OAuth2User user) {
+        return monthPlanService.getAllMonthPlans(user.getName());
     }
 
     @PostMapping
     public MonthPlan createMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlanDTO monthPlanDTO) {
-        return monthPlanService.createMonthPlan(user, monthPlanDTO);
+        return monthPlanService.createMonthPlan(user.getName(), monthPlanDTO);
     }
 
     @PutMapping
     public MonthPlan editMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlan editedMonthPlan){
-        return monthPlanService.editMonthPlan(user, editedMonthPlan);
+        return monthPlanService.editMonthPlan(user.getName(), editedMonthPlan);
     }
 
     @DeleteMapping("/{id}")
     public String deleteMonthPlan(@AuthenticationPrincipal OAuth2User user, @PathVariable String id){
-        return monthPlanService.deleteMonthPlan(user, id);
+        return monthPlanService.deleteMonthPlan(user.getName(), id);
     }
 }
