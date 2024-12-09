@@ -1,7 +1,9 @@
 import './App.css'
 import axios from "axios";
 import {useEffect, useState} from "react";
-import PieChart from "./components/PieChart/PieChart.tsx";
+import HomePage from "./pages/HomePage/HomePage.tsx";
+import Header from "./components/Header/Header.tsx";
+import Footer from "./components/Footer/Footer.tsx";
 
 
 function App() {
@@ -31,11 +33,19 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    return (<div id={"app"}>
-    <PieChart/>
-        {/*<p>current user:{user}</p>*/}
-        {/*<button onClick={logout}>logout</button>*/}
-        {/*<button onClick={login}>login</button>*/}
+    // function updateMonthPlan():void{ axios.get("/api/auth")
+    //     .then(response => setUser(response.data))
+    //     .catch((error) => {
+    //         console.error("Error fetching data:", error);
+    //     })}
+
+    return (<div>
+    <Header/>
+    <HomePage/>
+        <p>current user:{user}</p>
+        <button onClick={logout}>logout</button>
+        <button onClick={login}>login</button>
+    <Footer/>
     </div>)
 }
 
