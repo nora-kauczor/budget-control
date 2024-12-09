@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import axios from "axios";
+import {useEffect, useState} from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [user, setUser] = useState("")
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        updateUser()
+    }, []);
+
+    function updateUser(): void {
+        axios.get("/api/auth")
+            .then(response => setUser(response.data))
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            })
+    }
+
+    function login():void {
+        const host = window.location.host === "localhost:5173" ?
+            "http://localhost:8080" : window.location.origin
+        window.open(host + "/oauth2/authorization/github", "_self")
+    }
+
+    function logout():void {
+        const host = window.location.host === 'localhost:5173' ?
+            'http://localhost:8080' : window.location.origin
+        window.open(host + '/api/auth/logout', '_self')
+    }
+
+    return (<>
+        <p>current user:{user}</p>
+        <button onClick={logout}>logout</button>
+        <button onClick={login}>login</button>
+    </>)
 }
 
 export default App
