@@ -36,7 +36,7 @@ class MonthPlanControllerTest {
     }
 
     @Test
-    void getMonthPlan_shouldReturn200AndMonthPLan_whenCalledByItsIdAndItsCreator() throws Exception {
+    void getMonthPlan_shouldReturn200AndMonthPlan_whenCalledByItsIdAndItsCreator() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/budget/123")
                         .with(oauth2Login().attributes(attributes -> {
             attributes.put("sub", "000");
@@ -72,7 +72,7 @@ class MonthPlanControllerTest {
 
     @Test
     void getAllMonthPlans_shouldReturn200AndAllMonthPlansOfUser_whenCalledByHim() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/budget")
+        mvc.perform(MockMvcRequestBuilders.get("/api/budget/all")
                         .with(oauth2Login().attributes(attributes -> {
                             attributes.put("sub", "000");
                         })))

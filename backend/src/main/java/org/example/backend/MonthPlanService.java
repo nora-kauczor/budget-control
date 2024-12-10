@@ -5,7 +5,10 @@ import org.example.backend.exception.IdNotFoundException;
 import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.springframework.stereotype.Service;
 
+import java.time.YearMonth;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 @RequiredArgsConstructor
 @Service
 public class MonthPlanService {
@@ -17,6 +20,15 @@ public class MonthPlanService {
         if (monthPlan.user().equals(user)) {return monthPlan;}
         else {throw new UserIsNotAuthorizedException("User is not authorized.");}
         }
+
+    public MonthPlan getCurrentMonthPlan(String user)  {
+        String currentYearMonth = YearMonth.now().toString();
+        if (monthPlanRepo.existsByYearMonthAndUser(user,currentYearMonth))
+        {return monthPlanRepo.findByYearMonthAndUser(user, currentYearMonth);}
+        else {
+            throw new NoSuchElementException();
+        }
+    }
 
     public List<MonthPlan> getAllMonthPlans(String user) {
         return monthPlanRepo.findByUser(user);

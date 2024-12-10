@@ -22,6 +22,11 @@ public class MonthPlanController {
     }
 
     @GetMapping
+    public MonthPlan getCurrentMonthPlan(@AuthenticationPrincipal OAuth2User user)  {
+        return monthPlanService.getCurrentMonthPlan(user.getName());
+    }
+
+    @GetMapping("/all")
     public List<MonthPlan> getAllMonthPlans(@AuthenticationPrincipal OAuth2User user) {
         return monthPlanService.getAllMonthPlans(user.getName());
     }

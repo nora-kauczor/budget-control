@@ -39,6 +39,17 @@ class MonthPlanServiceTest {
         assertThrows(IdNotFoundException.class, () -> monthPlanService.getMonthPlan("000", "non existent id"));
     }
 
+@Test public void getCurrentMonthPlan_shouldReturnCurrentMonthPlanOfUser_ifMonthPlanExists()  {
+    MonthPlan testMonthPlan = new MonthPlan("123", "000",
+            "2024-12", 3000.00,
+            2000.00, new HashMap<>(), List.of());
+    when(mockedRepo.existsByYearMonthAndUser("000",
+            "2024-12")).thenReturn(true);
+    when(mockedRepo.findByYearMonthAndUser("000",
+            "2024-12")).thenReturn(testMonthPlan);
+    assertEquals(testMonthPlan, monthPlanService.getCurrentMonthPlan("000"));
+}
+
     @Test
     void getAllMonthPlansOfUser() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
