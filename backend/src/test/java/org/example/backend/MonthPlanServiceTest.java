@@ -16,12 +16,21 @@ class MonthPlanServiceTest {
     private final MonthPlanService monthPlanService = new MonthPlanService(mockedRepo);
 
     @Test
-    void getMonthPlanOfUser() throws UserIsNotAuthorizedException {
+    void getMonthPlanOfUser_shouldReturnMonthPLan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
         assertEquals(testMonthPlan, monthPlanService.getMonthPlan("000", "123"));
+    }
+
+    @Test
+    void getMonthPlan_shouldThrowUserIsNotAuthorizedException_whenCalledByOtherUser()  {
+        MonthPlan testMonthPlan = new MonthPlan("123", "000",
+                "2024-12", 3000.00,
+                2000.00, new HashMap<>(), List.of());
+        when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
+        assertThrows(UserIsNotAuthorizedException.class, () -> monthPlanService.getMonthPlan("111", "123"));
     }
 
     @Test
@@ -45,13 +54,22 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    void editMonthPlan_shouldReturnMonthPLan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException {
+    void editMonthPlan_shouldReturnMonthPlan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
         when(mockedRepo.save(testMonthPlan)).thenReturn(testMonthPlan);
         assertEquals(testMonthPlan, monthPlanService.editMonthPlan("000", testMonthPlan));
+    }
+
+    @Test
+    void editMonthPlan_shouldThrowUserIsNotAuthorizedException_whenCalledByOtherUser(){
+        MonthPlan testMonthPlan = new MonthPlan("123", "000",
+                "2024-12", 3000.00,
+                2000.00, new HashMap<>(), List.of());
+        when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
+        assertThrows(UserIsNotAuthorizedException.class, () -> monthPlanService.getMonthPlan("111", "123"));
     }
 
     @Test
@@ -62,5 +80,14 @@ class MonthPlanServiceTest {
         String deletionMessage = "Month plan successfully deleted.";
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
         assertEquals(deletionMessage, monthPlanService.deleteMonthPlan("000","123"));
+    }
+
+    @Test
+    void deleteMonthPlan_shouldThrowUserIsNotAuthorizedException_whenCalledByOtherUser(){
+        MonthPlan testMonthPlan = new MonthPlan("123", "000",
+                "2024-12", 3000.00,
+                2000.00, new HashMap<>(), List.of());
+        when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
+        assertThrows(UserIsNotAuthorizedException.class, () -> monthPlanService.getMonthPlan("111", "123"));
     }
 }
