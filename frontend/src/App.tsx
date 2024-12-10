@@ -4,14 +4,22 @@ import {useEffect, useState} from "react";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import Header from "./components/Header/Header.tsx";
 import Footer from "./components/Footer/Footer.tsx";
+import {MonthPlan} from "./types/MonthPlan.ts";
 
 
 function App() {
-    const [user, setUser] = useState("")
+    const [user, setUser] = useState<string>("")
+    const [monthPlan, setMonthPlan]=useState<MonthPlan>()
 
     useEffect(() => {
         updateUser()
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            updateMonthPlan()
+        }
+    }, [user]);
 
     function updateUser(): void {
         axios.get("/api/auth")
@@ -33,15 +41,15 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    // function updateMonthPlan():void{ axios.get("/api/auth")
-    //     .then(response => setUser(response.data))
-    //     .catch((error) => {
-    //         console.error("Error fetching data:", error);
-    //     })}
+    function updateMonthPlan():void{ axios.get("/api/budget/67580bc9ecdf50594ea64cdf")
+        .then(response => setMonthPlan(response.data))
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+        })}
 
     return (<div id={"app"}>
     <Header/>
-    <HomePage/>
+    <HomePage monthPlan={monthPlan ? monthPlan : undefined}/>
         <p>current user:{user}</p>
         <button onClick={logout}>logout</button>
         <button onClick={login}>login</button>
