@@ -1,5 +1,6 @@
 package org.example.backend;
 
+import org.example.backend.exception.IdNotFoundException;
 import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class MonthPlanServiceTest {
     private final MonthPlanService monthPlanService = new MonthPlanService(mockedRepo);
 
     @Test
-    void getMonthPlanOfUser_shouldReturnMonthPLan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException {
+    void getMonthPlanOfUser_shouldReturnMonthPLan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException, IdNotFoundException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
@@ -31,6 +32,11 @@ class MonthPlanServiceTest {
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
         assertThrows(UserIsNotAuthorizedException.class, () -> monthPlanService.getMonthPlan("111", "123"));
+    }
+
+    @Test
+    void getMonthPlan_shouldThrowIdNotFoundException_whenCalledWithNonExistentId(){
+        assertThrows(IdNotFoundException.class, () -> monthPlanService.getMonthPlan("000", "non existent id"));
     }
 
     @Test
@@ -54,7 +60,7 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    void editMonthPlan_shouldReturnMonthPlan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException {
+    void editMonthPlan_shouldReturnMonthPlan_whenCalledByItsIdAndItsCreator() throws UserIsNotAuthorizedException, IdNotFoundException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
@@ -73,7 +79,15 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    void deleteMonthPlan() throws UserIsNotAuthorizedException {
+    void editMonthPlan_shouldThrowIdNotFoundException_whenCalledWithObjectWithNonExistentId(){
+        MonthPlan testMonthPlan = new MonthPlan("id unknown to repo", "000",
+                "2024-12", 3000.00,
+                2000.00, new HashMap<>(), List.of());
+        assertThrows(IdNotFoundException.class, () -> monthPlanService.editMonthPlan("000", testMonthPlan));
+    }
+
+    @Test
+    void deleteMonthPlan() throws UserIsNotAuthorizedException, IdNotFoundException {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, new HashMap<>(), List.of());
@@ -89,5 +103,10 @@ class MonthPlanServiceTest {
                 2000.00, new HashMap<>(), List.of());
         when(mockedRepo.findById("123")).thenReturn(Optional.of(testMonthPlan));
         assertThrows(UserIsNotAuthorizedException.class, () -> monthPlanService.getMonthPlan("111", "123"));
+    }
+
+    @Test
+    void deleteMonthPlan_shouldThrowIdNotFoundException_whenCalledWithNonExistentId(){
+        assertThrows(IdNotFoundException.class, () -> monthPlanService.deleteMonthPlan("000", "non existent id"));
     }
 }

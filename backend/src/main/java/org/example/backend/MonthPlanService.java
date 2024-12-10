@@ -1,6 +1,7 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.exception.IdNotFoundException;
 import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,11 @@ public class MonthPlanService {
 
     private final MonthPlanRepo monthPlanRepo;
 
-    public MonthPlan getMonthPlan(String user, String id) throws UserIsNotAuthorizedException {
-        MonthPlan monthPlan = monthPlanRepo.findById(id).orElseThrow();
+    public MonthPlan getMonthPlan(String user, String id) throws UserIsNotAuthorizedException, IdNotFoundException {
+        MonthPlan monthPlan = monthPlanRepo.findById(id).orElseThrow(()->new IdNotFoundException("Id not found."));
         if (monthPlan.user().equals(user)) {return monthPlan;}
         else {throw new UserIsNotAuthorizedException("User is not authorized.");}
         }
-
 
     public List<MonthPlan> getAllMonthPlans(String user) {
         return monthPlanRepo.findByUser(user);
@@ -30,8 +30,8 @@ public class MonthPlanService {
         return monthPlanRepo.save(newMonthPlan);
     }
 
-    public MonthPlan editMonthPlan(String user, MonthPlan editedMonthPlan) throws UserIsNotAuthorizedException {
-        String authorOfMonthPlan= monthPlanRepo.findById(editedMonthPlan.id()).orElseThrow().user();
+    public MonthPlan editMonthPlan(String user, MonthPlan editedMonthPlan) throws UserIsNotAuthorizedException, IdNotFoundException {
+        String authorOfMonthPlan= monthPlanRepo.findById(editedMonthPlan.id()).orElseThrow(()->new IdNotFoundException("Id not found.")).user();
         if (authorOfMonthPlan.equals(user))
         {
             return monthPlanRepo.save(editedMonthPlan);
@@ -39,8 +39,8 @@ public class MonthPlanService {
         else {throw new UserIsNotAuthorizedException("User is not authorized.");}
     }
 
-    public String deleteMonthPlan(String user, String id) throws UserIsNotAuthorizedException {
-        String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow().user();
+    public String deleteMonthPlan(String user, String id) throws UserIsNotAuthorizedException, IdNotFoundException {
+        String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow(()->new IdNotFoundException("Id not found.")).user();
         if (authorOfMonthPlan.equals(user))
         {
             monthPlanRepo.deleteById(id);
