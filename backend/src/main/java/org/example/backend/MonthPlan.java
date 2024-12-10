@@ -9,7 +9,7 @@ public record MonthPlan(
         String yearMonth,
         double totalBudget,
         double totalLeftover,
-        Map<String, CategoryPlan> categoryPlans,
+        List<CategoryPlan> categoryPlans,
         List<Transaction> transactions
 ) {
 }

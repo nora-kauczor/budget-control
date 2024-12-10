@@ -10,7 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.HashMap;
+
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
@@ -31,7 +31,7 @@ class MonthPlanControllerTest {
     void setUp() {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
-                2000.00, new HashMap<>(), List.of());
+                2000.00, List.of(), List.of());
         repo.save(testMonthPlan);
     }
 
@@ -46,7 +46,7 @@ class MonthPlanControllerTest {
                         """
                                 {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
                                 """
                 ));
 
@@ -81,7 +81,7 @@ class MonthPlanControllerTest {
                         """
                                [{"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}]
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}]
                                """
                 ));
     }
@@ -96,7 +96,7 @@ class MonthPlanControllerTest {
                         .content("""
                                {"yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
                                """)
                 )
                 .andExpect(status().isOk())
@@ -104,7 +104,7 @@ class MonthPlanControllerTest {
                         """
                                {"yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());
@@ -120,7 +120,7 @@ class MonthPlanControllerTest {
                         .content("""
                                {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
                                """)
                 )
                 .andExpect(status().isOk())
@@ -128,7 +128,7 @@ class MonthPlanControllerTest {
                         """
                                {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans":[],"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());
@@ -144,7 +144,7 @@ class MonthPlanControllerTest {
                         .content("""
                                {"id": "123", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
                                """)
                 )
                 .andExpect(status().isForbidden());
@@ -160,7 +160,7 @@ class MonthPlanControllerTest {
                 .content("""
                                {"id": "nonexistent-id", "user": "000", "yearMonth":
                                                 "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": {},"transactions": []}
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
                                """)
         ).andExpect(status().isNotFound());
     }
