@@ -30,12 +30,27 @@ const PieChart: React.FC<Props> = ({monthPlan}) => {
         return <p className={"loading-message"}>Loading...</p>
     }
 
+    function getAllFractions(): number[] {
+        return monthPlan.categoryPlans.flatMap(plan => {
+            const amountSpent: number = plan.categoryBudget -
+                plan.categoryLeftover;
+            return [plan.categoryLeftover.toFixed(2), amountSpent.toFixed(2)]
+        })
+    }
+
+    function getAllLables():string[]{
+       return monthPlan.categoryPlans.flatMap(plan => [plan.category+" (left)", plan.category+" (spent)"])
+    }
+    console.log(getAllFractions())
 
     const data: PieChartData = {
-        labels: monthPlan.categoryPlans.map(plan => plan.category), datasets: [{
-            data: monthPlan.categoryPlans.map(plan => plan.categoryBudget),
-            backgroundColor: ['#6DDE93', '#6DDCDE', '#6DDEBA', '#DCE1DC', '#6DB8DE'],
-            borderColor: ['black', 'black', 'black', 'black'],
+        labels: getAllLables(),
+        datasets: [{
+            data: getAllFractions(),
+            backgroundColor: ['#6DDE93', 'darkgray', '#6DDCDE', 'darkgray',
+                '#6DDEBA', 'darkgray', '#DCE1DC', 'darkgray', '#6DB8DE',
+                'darkgray'],
+            borderColor: ['black', 'darkgray','black', 'darkgray','black', 'darkgray','black','darkgray'],
             borderWidth: 2,
         },],
     };
@@ -44,8 +59,7 @@ const PieChart: React.FC<Props> = ({monthPlan}) => {
         responsive: true, plugins: {
             legend: {
                 display: false,
-            },
-            tooltip: {enabled: false,}, datalabels: {
+            }, tooltip: {enabled: false,}, datalabels: {
                 display: true,
                 color: 'black',
                 anchor: 'end',
