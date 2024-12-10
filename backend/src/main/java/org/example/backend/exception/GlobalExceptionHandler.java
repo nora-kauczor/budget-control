@@ -9,8 +9,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({UserIsNotAuthorizedException.class})
-    public String handleUserIsNotAuthorizedException(UserIsNotAuthorizedException userIsNotAuthorizedException){
+    public String handleUserIsNotAuthorizedException(){
         return "User is not authorized for the requested method and object(s).";
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({IdNotFoundException.class})
+    public String handleIdNotFoundException(){
+        return "ID not found.";
+    }
+
 
 }

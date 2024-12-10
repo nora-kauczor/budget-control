@@ -35,7 +35,6 @@ class MonthPlanControllerTest {
         repo.save(testMonthPlan);
     }
 
-
     @Test
     void getMonthPlan_shouldReturn200AndMonthPLan_whenCalledByItsIdAndItsCreator() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/budget/123")
@@ -60,6 +59,15 @@ class MonthPlanControllerTest {
                             attributes.put("sub", "111");
                         })))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void getMonthPlan_shouldReturn404_whenCalledWithNonExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/budget/nonexistent-id")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "000");
+                        })))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -143,6 +151,22 @@ class MonthPlanControllerTest {
     }
 
     @Test
+    void editMonthPlan_shouldReturn404_whenCalledWithNonExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/api/budget")
+                .with(oauth2Login().attributes(attributes -> {
+                    attributes.put("sub", "000");
+                }))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                               {"id": "nonexistent-id", "user": "000", "yearMonth":
+                                                "2024-12", "totalBudget": 3000.00,
+                                               "totalLeftover": 2000.00, "categoryPlanMap": {},"transactions": []}
+                               """)
+        ).andExpect(status().isNotFound());
+    }
+
+
+    @Test
     void deleteMonthPlan_shouldReturn200AndConfirmationMessage_whenCalledByCreatorAndWithExistentId() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/budget/123")
                         .with(oauth2Login().attributes(attributes -> {
@@ -159,5 +183,14 @@ class MonthPlanControllerTest {
                             attributes.put("sub", "111");
                         })))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deleteMonthPlan_shouldReturn404_whenCalledWithNonExistentId() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/api/budget/nonexistent-id")
+                        .with(oauth2Login().attributes(attributes -> {
+                            attributes.put("sub", "000");
+                        })))
+                .andExpect(status().isNotFound());
     }
 }
