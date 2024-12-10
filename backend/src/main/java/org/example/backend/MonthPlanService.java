@@ -38,7 +38,7 @@ public class MonthPlanService {
         // TODO check if there already exists a month plan for this month and user
         MonthPlan newMonthPlan = new MonthPlan(null, user,
                 monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
-                monthPlanDTO.totalLeftover(), monthPlanDTO.categoryPlanMap(),
+                monthPlanDTO.totalLeftover(), monthPlanDTO.categoryPlans(),
                 monthPlanDTO.transactions());
         return monthPlanRepo.save(newMonthPlan);
     }
