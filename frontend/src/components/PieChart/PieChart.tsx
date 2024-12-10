@@ -3,6 +3,7 @@ import React from 'react'
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartOptions } from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {MonthPlan} from "../../types/MonthPlan.ts";
 ChartJS.register(ChartDataLabels);
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels)
@@ -17,11 +18,19 @@ interface PieChartData {
     }[];
 }
 
-const PieChart: React.FC = () => {
-const label:string = "label 5"
+type Props = {
+    monthPlan: MonthPlan | undefined
+}
+
+const PieChart: React.FC<Props> = ({monthPlan}) => {
+    if (!monthPlan) {
+        return <p className={"loading-message"}>Loading...</p>
+    }
+
+
 
     const data: PieChartData = {
-        labels: ['Series A', 'Series B', 'Series C', 'test', label],
+        labels: ['Series B', 'Series C', 'test'],
         datasets: [
             {
                 data: [10, 20, 5, 15, 5],
@@ -49,6 +58,8 @@ const label:string = "label 5"
             },
         },
     };
+
+
 
     return (
         <div id={"pie-chart"}>

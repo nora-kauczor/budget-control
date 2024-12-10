@@ -38,6 +38,8 @@ public class MonthPlanController {
 
     @PutMapping
     public MonthPlan editMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlan editedMonthPlan) throws UserIsNotAuthorizedException, IdNotFoundException {
+        System.out.println(user);
+        System.out.println(editedMonthPlan);
         return monthPlanService.editMonthPlan(user.getName(), editedMonthPlan);
     }
 
