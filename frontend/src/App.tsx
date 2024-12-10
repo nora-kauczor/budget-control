@@ -41,7 +41,7 @@ function App() {
         window.open(host + '/api/auth/logout', '_self')
     }
 
-    function updateMonthPlan():void{ axios.get("/api/budget/67580bc9ecdf50594ea64cdf")
+    function updateMonthPlan():void{ axios.get("/api/budget/67581e735fb48512c11d07cd")
         .then(response => setMonthPlan(response.data))
         .catch((error) => {
             console.error("Error fetching data:", error);

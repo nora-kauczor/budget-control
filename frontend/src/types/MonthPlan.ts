@@ -9,7 +9,8 @@ export type MonthPlan = {
 }
 
 export type CategoryPlan = {
-    categoryBudget:string,
+    category:string,
+    categoryBudget:number,
     categoryLeftover:number
 }
 
