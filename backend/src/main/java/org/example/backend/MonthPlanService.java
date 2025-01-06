@@ -39,7 +39,7 @@ public class MonthPlanService {
         return monthPlanRepo.findByUser(user);
     }
 
-    // TODO evtl bei create noch keine transactions akzeptieren (denn leftover ist hier ja auch erstmal das budget)
+
     public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) throws MonthPlanAlreadyExistsException {
         boolean monthPlanAlreadyExists = monthPlanRepo.existsByYearMonthAndUser(monthPlanDTO.yearMonth(), user);
         if (monthPlanAlreadyExists) {
@@ -54,7 +54,7 @@ public class MonthPlanService {
         MonthPlan newMonthPlan = new MonthPlan(null, user,
                 monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
                 monthPlanDTO.totalBudget(), categoryPlans,
-                monthPlanDTO.transactions());
+                new ArrayList<>());
         return monthPlanRepo.save(newMonthPlan);
     }
 

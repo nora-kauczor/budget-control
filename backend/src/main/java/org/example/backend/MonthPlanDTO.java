@@ -5,8 +5,8 @@ import java.util.List;
 public record MonthPlanDTO(
         String yearMonth,
         double totalBudget,
-        List<CategoryPlanDTO> categoryPlanDTOs,
-        List<Transaction> transactions
+        List<CategoryPlanDTO> categoryPlanDTOs
+
 ) {
 }
 
