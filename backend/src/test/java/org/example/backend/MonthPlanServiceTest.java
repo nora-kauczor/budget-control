@@ -6,6 +6,7 @@ import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.junit.jupiter.api.Test;
 
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,13 +43,14 @@ class MonthPlanServiceTest {
 
     @Test
     public void getCurrentMonthPlan_shouldReturnCurrentMonthPlanOfUser_ifMonthPlanExists() {
+        String currentYearMonth = YearMonth.now().toString();
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
-                "2024-12", 3000.00,
+                currentYearMonth, 3000.00,
                 2000.00, List.of(), List.of());
         when(mockedRepo.existsByYearMonthAndUser("000",
-                "2024-12")).thenReturn(true);
+                currentYearMonth)).thenReturn(true);
         when(mockedRepo.findByYearMonthAndUser("000",
-                "2024-12")).thenReturn(testMonthPlan);
+                currentYearMonth)).thenReturn(testMonthPlan);
         assertEquals(testMonthPlan, monthPlanService.getCurrentMonthPlan("000"));
     }
 

@@ -95,21 +95,20 @@ class MonthPlanControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                {"yearMonth":
-                                                "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
+                                                "2024-11", "totalBudget": 3000.00,
+                                               "totalLeftover": 3000.00, "categoryPlans": [],"transactions": []}
                                """)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """
                                {"yearMonth":
-                                                "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
+                                                "2024-11", "totalBudget": 3000.00,
+                                               "totalLeftover": 3000.00, "categoryPlans": [],"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
-
 
     @Test
     void createMonthPlan_shouldReturn409_whenCalledWithMonthPlanDTO_IfMonthPlanAlreadyExists() throws Exception {
@@ -139,16 +138,16 @@ class MonthPlanControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                {"id": "123", "user": "000", "yearMonth":
-                                                "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
+                                                "2024-12", "totalBudget": 0.00,
+                                               "totalLeftover": 0.00, "categoryPlans": [],"transactions": []}
                                """)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """
                                {"id": "123", "user": "000", "yearMonth":
-                                                "2024-12", "totalBudget": 3000.00,
-                                               "totalLeftover": 2000.00, "categoryPlans":[],"transactions": []}
+                                                "2024-12", "totalBudget": 0.00,
+                                               "totalLeftover": 0.00, "categoryPlans":[],"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());

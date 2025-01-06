@@ -46,10 +46,12 @@ public class MonthPlanService {
             throw new MonthPlanAlreadyExistsException("Cannot create month plan because month plan for this month already exists.");
         }
         List<CategoryPlan> categoryPlans = new ArrayList<>();
-        for (int i = 0; i < monthPlanDTO.categoryPlanDTOs().size(); i++) {
-            CategoryPlanDTO categoryPlanDTO = monthPlanDTO.categoryPlanDTOs().get(i);
-            CategoryPlan categoryPlan = new CategoryPlan(categoryPlanDTO.category(), categoryPlanDTO.categoryBudget(), categoryPlanDTO.categoryBudget());
-            categoryPlans.add(categoryPlan);
+        if (monthPlanDTO.categoryPlanDTOs() != null) {
+            for (int i = 0; i < monthPlanDTO.categoryPlanDTOs().size(); i++) {
+                CategoryPlanDTO categoryPlanDTO = monthPlanDTO.categoryPlanDTOs().get(i);
+                CategoryPlan categoryPlan = new CategoryPlan(categoryPlanDTO.category(), categoryPlanDTO.categoryBudget(), categoryPlanDTO.categoryBudget());
+                categoryPlans.add(categoryPlan);
+            }
         }
         MonthPlan newMonthPlan = new MonthPlan(null, user,
                 monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
