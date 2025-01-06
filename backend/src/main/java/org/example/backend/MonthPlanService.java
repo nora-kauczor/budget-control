@@ -2,6 +2,7 @@ package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.MonthPlanAlreadyExistsException;
 import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,19 @@ public class MonthPlanService {
     private final MonthPlanRepo monthPlanRepo;
 
     public MonthPlan getMonthPlan(String user, String id) throws UserIsNotAuthorizedException, IdNotFoundException {
-        MonthPlan monthPlan = monthPlanRepo.findById(id).orElseThrow(()->new IdNotFoundException("Id not found."));
-        if (monthPlan.user().equals(user)) {return monthPlan;}
-        else {throw new UserIsNotAuthorizedException("User is not authorized.");}
+        MonthPlan monthPlan = monthPlanRepo.findById(id).orElseThrow(() -> new IdNotFoundException("Id not found."));
+        if (monthPlan.user().equals(user)) {
+            return monthPlan;
+        } else {
+            throw new UserIsNotAuthorizedException("User is not authorized.");
         }
+    }
 
-    public MonthPlan getCurrentMonthPlan(String user)  {
+    public MonthPlan getCurrentMonthPlan(String user) {
         String currentYearMonth = YearMonth.now().toString();
-        if (monthPlanRepo.existsByYearMonthAndUser(user,currentYearMonth))
-        {return monthPlanRepo.findByYearMonthAndUser(user, currentYearMonth);}
-        else {
+        if (monthPlanRepo.existsByYearMonthAndUser(user, currentYearMonth)) {
+            return monthPlanRepo.findByYearMonthAndUser(user, currentYearMonth);
+        } else {
             throw new NoSuchElementException();
         }
     }
@@ -34,8 +38,11 @@ public class MonthPlanService {
         return monthPlanRepo.findByUser(user);
     }
 
-    public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) {
-        // TODO check if there already exists a month plan for this month and user
+    public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) throws MonthPlanAlreadyExistsException {
+        boolean monthPlanAlreadyExists = monthPlanRepo.existsByYearMonthAndUser(monthPlanDTO.yearMonth(), user);
+        if (monthPlanAlreadyExists) {
+            throw new MonthPlanAlreadyExistsException("Cannot create month plan because month plan for this month already exists.");
+        }
         MonthPlan newMonthPlan = new MonthPlan(null, user,
                 monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
                 monthPlanDTO.totalLeftover(), monthPlanDTO.categoryPlans(),
@@ -44,22 +51,22 @@ public class MonthPlanService {
     }
 
     public MonthPlan editMonthPlan(String user, MonthPlan editedMonthPlan) throws UserIsNotAuthorizedException, IdNotFoundException {
-        String authorOfMonthPlan= monthPlanRepo.findById(editedMonthPlan.id()).orElseThrow(()->new IdNotFoundException("Id not found.")).user();
-        if (authorOfMonthPlan.equals(user))
-        {
+        String authorOfMonthPlan = monthPlanRepo.findById(editedMonthPlan.id()).orElseThrow(() -> new IdNotFoundException("Id not found.")).user();
+        if (authorOfMonthPlan.equals(user)) {
             return monthPlanRepo.save(editedMonthPlan);
+        } else {
+            throw new UserIsNotAuthorizedException("User is not authorized.");
         }
-        else {throw new UserIsNotAuthorizedException("User is not authorized.");}
     }
 
     public String deleteMonthPlan(String user, String id) throws UserIsNotAuthorizedException, IdNotFoundException {
-        String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow(()->new IdNotFoundException("Id not found.")).user();
-        if (authorOfMonthPlan.equals(user))
-        {
+        String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow(() -> new IdNotFoundException("Id not found.")).user();
+        if (authorOfMonthPlan.equals(user)) {
             monthPlanRepo.deleteById(id);
             return "Month plan successfully deleted.";
+        } else {
+            throw new UserIsNotAuthorizedException("User is not authorized.");
         }
-        else {throw new UserIsNotAuthorizedException("User is not authorized.");}
     }
 
 }

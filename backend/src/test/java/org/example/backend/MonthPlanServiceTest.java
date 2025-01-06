@@ -1,6 +1,7 @@
 package org.example.backend;
 
 import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.MonthPlanAlreadyExistsException;
 import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,7 @@ class MonthPlanServiceTest {
         assertThrows(IdNotFoundException.class, () -> monthPlanService.getMonthPlan("000", "non existent id"));
     }
 
-@Test public void getCurrentMonthPlan_shouldReturnCurrentMonthPlanOfUser_ifMonthPlanExists()  {
+    @Test public void getCurrentMonthPlan_shouldReturnCurrentMonthPlanOfUser_ifMonthPlanExists()  {
     MonthPlan testMonthPlan = new MonthPlan("123", "000",
             "2024-12", 3000.00,
             2000.00, List.of(), List.of());
@@ -48,7 +49,7 @@ class MonthPlanServiceTest {
     when(mockedRepo.findByYearMonthAndUser("000",
             "2024-12")).thenReturn(testMonthPlan);
     assertEquals(testMonthPlan, monthPlanService.getCurrentMonthPlan("000"));
-}
+    }
 
     @Test
     void getAllMonthPlansOfUser() {
@@ -60,14 +61,23 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    void createMonthPlan() {
+    void createMonthPlan_shouldReturnMonthPlan_whenCalledWithMonthPlanDTO() throws MonthPlanAlreadyExistsException {
         MonthPlanDTO testDTO = new MonthPlanDTO("2024-12", 3000.00,
                 2000.00, List.of(), List.of());
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
                 2000.00, List.of(), List.of());
+        when(mockedRepo.existsByYearMonthAndUser("2024-12", "000")).thenReturn(false);
         when(mockedRepo.save(any(MonthPlan.class))).thenReturn(testMonthPlan);
         assertEquals(testMonthPlan, monthPlanService.createMonthPlan("000", testDTO));
+    }
+
+    @Test
+    void createMonthPlan_shouldThrowMonthPlanAlreadyExistsException_whenCalledWithMonthPlanDTO_IfMonthPlanAlreadyExists()  {
+        MonthPlanDTO testDTO = new MonthPlanDTO("2024-12", 3000.00,
+                2000.00, List.of(), List.of());
+        when(mockedRepo.existsByYearMonthAndUser("2024-12", "000")).thenReturn(true);
+        assertThrows(MonthPlanAlreadyExistsException.class, () -> monthPlanService.createMonthPlan("000", testDTO));
     }
 
     @Test

@@ -87,7 +87,7 @@ class MonthPlanControllerTest {
     }
 
     @Test
-    void createMonthPlan() throws Exception {
+    void createMonthPlan_shouldReturn200AndMonthPlan_whenCalledWithMonthPlanDTO() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/api/budget")
                         .with(oauth2Login().attributes(attributes ->
                             attributes.put("sub", "000")
@@ -109,6 +109,26 @@ class MonthPlanControllerTest {
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
+
+
+    @Test
+    void createMonthPlan_shouldReturn409_whenCalledWithMonthPlanDTO_IfMonthPlanAlreadyExists() throws Exception {
+        MonthPlan existingMonthPlan = new MonthPlan("122", "000",
+                "2024-01", 3000.00,
+                2000.00, List.of(), List.of());
+        repo.save(existingMonthPlan);
+        mvc.perform(MockMvcRequestBuilders.post("/api/budget")
+                        .with(oauth2Login().attributes(attributes ->
+                                attributes.put("sub", "000")
+                        ))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                               {"yearMonth":
+                                                "2024-01", "totalBudget": 3000.00,
+                                               "totalLeftover": 2000.00, "categoryPlans": [],"transactions": []}
+                               """)
+                )
+                .andExpect(status().isConflict());}
 
     @Test
     void editMonthPlan_shouldReturn200AndEditedMonthPlan_whenCalledWithEditedMonthPlanAndByTheCreator() throws Exception {

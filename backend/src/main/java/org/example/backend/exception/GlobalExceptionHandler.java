@@ -19,5 +19,10 @@ public class GlobalExceptionHandler {
         return "ID not found.";
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler({MonthPlanAlreadyExistsException.class})
+    public String handleMonthPlanAlreadyExistsException(){
+        return "Cannot create month plan because month plan for this month already exists.";
+    }
 
 }

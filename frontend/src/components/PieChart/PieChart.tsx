@@ -38,13 +38,13 @@ const PieChart: React.FC<Props> = ({monthPlan}) => {
         })
     }
 
-    function getAllLables():string[]{
+    function getAllLabels():string[]{
        return monthPlan.categoryPlans.flatMap(plan => [plan.category+" (left)", plan.category+" (spent)"])
     }
-    console.log(getAllFractions())
+
 
     const data: PieChartData = {
-        labels: getAllLables(),
+        labels: getAllLabels(),
         datasets: [{
             data: getAllFractions(),
             backgroundColor: ['#6DDE93', 'darkgray', '#6DDCDE', 'darkgray',
