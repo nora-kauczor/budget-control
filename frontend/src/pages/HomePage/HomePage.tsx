@@ -11,7 +11,9 @@ export default function HomePage(props: Readonly<Props>) {
     }
 
     return (<main id={"homepage"}>
-            <PieChart monthPlan={props.monthPlan}/>
-        </main>)
+        <p>{props.monthPlan.yearMonth}</p>
+        <p>{props.monthPlan.totalBudget.toFixed(2)}€ of {props.monthPlan.totalBudget.toFixed(2)}€ left</p>
+        <PieChart monthPlan={props.monthPlan}/>
+    </main>)
 
 }

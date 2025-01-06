@@ -2,6 +2,7 @@ package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exception.IdNotFoundException;
+import org.example.backend.exception.MonthPlanAlreadyExistsException;
 import org.example.backend.exception.UserIsNotAuthorizedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -32,7 +33,7 @@ public class MonthPlanController {
     }
 
     @PostMapping
-    public MonthPlan createMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlanDTO monthPlanDTO) {
+    public MonthPlan createMonthPlan(@AuthenticationPrincipal OAuth2User user, @RequestBody MonthPlanDTO monthPlanDTO) throws MonthPlanAlreadyExistsException {
         return monthPlanService.createMonthPlan(user.getName(), monthPlanDTO);
     }
 
