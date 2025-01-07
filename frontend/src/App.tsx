@@ -6,6 +6,8 @@ import Header from "./components/Header/Header.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import {MonthPlan} from "./types/MonthPlan.ts";
 import EditPage from "./pages/EditPage/EditPage.tsx";
+import {Route, Routes} from "react-router-dom";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 
 
 function App() {
@@ -52,11 +54,20 @@ function App() {
 
     return (<div id={"app"}>
         <Header/>
-        <HomePage monthPlan={monthPlan ? monthPlan : undefined}/>
+
         <p>current user:{user}</p>
         <button onClick={logout}>logout</button>
         <button onClick={login}>login</button>
-        <EditPage monthPlan={monthPlan} setMonthPlan={setMonthPlan}/>
+
+        <Routes>
+            <Route path={"/login"}
+                   element={<LoginPage
+                   />}/>
+            <Route path={"/"} element={<HomePage
+                monthPlan={monthPlan ? monthPlan : undefined}/>}/>
+            <Route path={"/form"} element={<EditPage monthPlan={monthPlan}
+                                                     setMonthPlan={setMonthPlan}/>}/>
+        </Routes>
         <Footer/>
     </div>)
 }
