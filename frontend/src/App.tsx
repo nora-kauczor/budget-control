@@ -19,6 +19,10 @@ function App() {
         updateUser()
     }, []);
 
+    useEffect(() => {
+        if (!user) {navigate("/login")}
+    }, [user]);
+
 
     useEffect(() => {
         if (user) {
@@ -58,14 +62,11 @@ function App() {
     return (<div id={"app"}>
         <Header/>
 
-        <p>current user:{user}</p>
-        <button onClick={logout}>logout</button>
-        <button onClick={login}>login</button>
-
         <Routes>
             <Route path={"/login"}
                    element={<LoginPage
                        user={user}
+                       login={login}
                    />}/>
             <Route path={"/"} element={<HomePage
                 monthPlan={monthPlan ? monthPlan : undefined}/>}/>
