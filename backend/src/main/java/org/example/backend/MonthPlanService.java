@@ -53,9 +53,13 @@ public class MonthPlanService {
                 categoryPlans.add(categoryPlan);
             }
         }
+        assert monthPlanDTO.categoryPlanDTOs() != null;
+        double totalBudget = monthPlanDTO.categoryPlanDTOs().stream()
+                .mapToDouble(CategoryPlanDTO::categoryBudget)
+                .sum();
         MonthPlan newMonthPlan = new MonthPlan(null, user,
-                monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
-                monthPlanDTO.totalBudget(), categoryPlans,
+                monthPlanDTO.yearMonth(), totalBudget,
+                totalBudget, categoryPlans,
                 new ArrayList<>());
         return monthPlanRepo.save(newMonthPlan);
     }

@@ -35,7 +35,6 @@ export default function EditPage(props: Readonly<Props>) {
         }
     }, []);
 
-
     function handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {
         const source = event.target.name;
         const data = new InputEvent(event.target.value);
@@ -82,10 +81,9 @@ export default function EditPage(props: Readonly<Props>) {
         }
     }
 
-    function handleChangeInput(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleChangeBudget(event: React.ChangeEvent<HTMLInputElement>) {
         const source = event.target.name;
-        const data = new InputEvent(event.target.value);
-        const value: number = parseInt(data.type);
+        const value:number = Number(event.target.value);
         if (source === "category0-input") {
             const newCategoryPlan: CategoryPlan = {
                 category: category0.category,
@@ -145,11 +143,12 @@ export default function EditPage(props: Readonly<Props>) {
                     console.error("Error fetching data:", error);
                 })
     }
-// TODO wo wird ausgewählt für welchen monat
+
 
    function createMonthPlan(){
         if (!props.monthPlan) {return}
         const newMonthPlan:MonthPlanDTO = {
+            // TODO wo wird ausgewählt für welchen monat
             yearMonth:"2025-01",
             totalBudget: props.monthPlan.totalBudget,
             categoryPlans: [category0, category1, category2, category3, category4],
@@ -162,6 +161,7 @@ export default function EditPage(props: Readonly<Props>) {
     }
 
     return (<main>
+        <h2>month year</h2>
         {props.monthPlan  && <h2>{props.monthPlan?.totalLeftover} left
             of {props.monthPlan?.totalBudget}</h2>}
         <form>
@@ -175,7 +175,7 @@ export default function EditPage(props: Readonly<Props>) {
                 <input className={"category-input"}
                        name={"category0-input"}
                        value={category0.categoryBudget}
-                       onChange={handleChangeInput}/>
+                       onChange={handleChangeBudget}/>
                 <p className={"category-leftover"}>{category0.categoryLeftover}</p>
             </div>
             <div className={"category-wrapper"}>
@@ -188,7 +188,7 @@ export default function EditPage(props: Readonly<Props>) {
                 <input className={"category-input"}
                        name={"category1-input"}
                        value={category1.categoryBudget}
-                       onChange={handleChangeInput}/>
+                       onChange={handleChangeBudget}/>
                 <p className={"category-leftover"}>{category1.categoryLeftover}</p>
             </div>
             <div className={"category-wrapper"}>
@@ -201,7 +201,7 @@ export default function EditPage(props: Readonly<Props>) {
                 <input className={"category-input"}
                        name={"category2-input"}
                        value={category2.categoryBudget}
-                       onChange={handleChangeInput}/>
+                       onChange={handleChangeBudget}/>
                 <p className={"category-leftover"}>{category2.categoryLeftover}</p>
             </div>
             <div className={"category-wrapper"}>
@@ -214,7 +214,7 @@ export default function EditPage(props: Readonly<Props>) {
                 <input className={"category-input"}
                        name={"category3-input"}
                        value={category3.categoryBudget}
-                       onChange={handleChangeInput}/>
+                       onChange={handleChangeBudget}/>
                 <p className={"category-leftover"}>{category3.categoryLeftover}</p>
             </div>
             <div className={"category-wrapper"}>
@@ -227,7 +227,7 @@ export default function EditPage(props: Readonly<Props>) {
                 <input className={"category-input"}
                        name={"category4-input"}
                        value={category4.categoryBudget}
-                       onChange={handleChangeInput}/>
+                       onChange={handleChangeBudget}/>
                 <p className={"category-leftover"}>{category4.categoryLeftover}</p>
             </div>
             <button onClick={props.monthPlan ? updateMonthPlan : createMonthPlan}>Save changes</button>

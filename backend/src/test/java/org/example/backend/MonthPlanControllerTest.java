@@ -95,16 +95,15 @@ class MonthPlanControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                {"yearMonth":
-                                                "2024-11", "totalBudget": 3000.00,
-                                               "totalLeftover": 3000.00, "categoryPlans": [],"transactions": []}
+                                                "2024-11",  "categoryPlanDTOs": []}
                                """)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """
                                {"yearMonth":
-                                                "2024-11", "totalBudget": 3000.00,
-                                               "totalLeftover": 3000.00, "categoryPlans": [],"transactions": []}
+                                                "2024-11", "totalBudget": 0.00,
+                                               "totalLeftover": 0.00, "categoryPlans": [],"transactions": []}
                                """
                 ))
                 .andExpect(jsonPath("$.id").isNotEmpty());

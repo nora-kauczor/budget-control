@@ -42,7 +42,7 @@ class MonthPlanServiceTest {
     }
 
     @Test
-    public void getCurrentMonthPlan_shouldReturnCurrentMonthPlanOfUser_ifMonthPlanExists() {
+    void getCurrentMonthPlan_shouldReturnCurrentMonthPlanOfUser_ifMonthPlanExists() {
         String currentYearMonth = YearMonth.now().toString();
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 currentYearMonth, 3000.00,
@@ -65,7 +65,7 @@ class MonthPlanServiceTest {
 
     @Test
     void createMonthPlan_shouldReturnMonthPlan_whenCalledWithMonthPlanDTO() throws MonthPlanAlreadyExistsException {
-        MonthPlanDTO testDTO = new MonthPlanDTO("2024-12", 3000.00,
+        MonthPlanDTO testDTO = new MonthPlanDTO("2024-12",
                 List.of());
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 "2024-12", 3000.00,
@@ -77,7 +77,7 @@ class MonthPlanServiceTest {
 
     @Test
     void createMonthPlan_shouldThrowMonthPlanAlreadyExistsException_whenCalledWithMonthPlanDTO_IfMonthPlanAlreadyExists() {
-        MonthPlanDTO testDTO = new MonthPlanDTO("2024-12", 3000.00,
+        MonthPlanDTO testDTO = new MonthPlanDTO("2024-12",
                 List.of());
         when(mockedRepo.existsByYearMonthAndUser("2024-12", "000")).thenReturn(true);
         assertThrows(MonthPlanAlreadyExistsException.class, () -> monthPlanService.createMonthPlan("000", testDTO));
