@@ -6,22 +6,25 @@ import Header from "./components/Header/Header.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import {MonthPlan} from "./types/MonthPlan.ts";
 import EditPage from "./pages/EditPage/EditPage.tsx";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 
 
 function App() {
     const [user, setUser] = useState<string>("")
     const [monthPlan, setMonthPlan] = useState<MonthPlan>()
+    const navigate = useNavigate()
 
     useEffect(() => {
         updateUser()
     }, []);
 
+
     useEffect(() => {
         if (user) {
             updateMonthPlan()
         }
+        // else { navigate("/login")}
     }, [user]);
 
     function updateUser(): void {
@@ -62,13 +65,14 @@ function App() {
         <Routes>
             <Route path={"/login"}
                    element={<LoginPage
+                       user={user}
                    />}/>
             <Route path={"/"} element={<HomePage
                 monthPlan={monthPlan ? monthPlan : undefined}/>}/>
             <Route path={"/form"} element={<EditPage monthPlan={monthPlan}
                                                      setMonthPlan={setMonthPlan}/>}/>
         </Routes>
-        <Footer/>
+        <Footer logout={logout}/>
     </div>)
 }
 

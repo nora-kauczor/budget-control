@@ -1,16 +1,20 @@
 import './HomePage.css'
 import PieChart from "../../components/PieChart/PieChart.tsx";
 import {MonthPlan} from "../../types/MonthPlan.ts";
+import {useNavigate} from "react-router-dom";
 
 type Props = {
     monthPlan: MonthPlan | undefined
 }
 export default function HomePage(props: Readonly<Props>) {
+    const navigate = useNavigate()
+
+
     if (!props.monthPlan) {
         return (<main>
             <p>There is no plan for the current month, yet</p>
             <p>Go to form to create it:</p>
-            <button>Go to form</button>
+            <button onClick={() => navigate("/form")}>Go to form</button>
         </main>)
     }
 

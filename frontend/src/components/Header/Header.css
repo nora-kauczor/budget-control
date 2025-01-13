@@ -1,3 +1,6 @@
 header {
     width: 100%;
-    background-color: lightgoldenrodyellow}
+    height: 7vh;
+    max-height: 70px;
+    background-color: var(--header-footer-color);
+}
