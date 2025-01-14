@@ -1,7 +1,8 @@
+import './CreateForm.css'
 import {MonthPlan} from "../../types/MonthPlan.ts";
 import axios from "axios";
 import {MonthPlanDTO} from "../../types/MonthPlanDTO.ts";
-import { useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {uid} from "uid";
 
 
@@ -14,6 +15,14 @@ export default function CreateForm(props: Readonly<Props>) {
     const [yearInput, setYearInput] = useState<string>("")
     const [totalBudget, setTotalBudget] = useState<number>(0)
     const [budgetExceeded, setBudgetExceeded] = useState<boolean>(false)
+
+    console.log("budgetExceeded: ", budgetExceeded)
+
+// Anzeige von budget exceeded soll aktualisiert werden wenn on
+
+    useEffect(() => {
+        checkCoverage()
+    }, [totalBudget]);
 
     function handleChangeSelection(event: React.ChangeEvent<HTMLSelectElement>) {
         const source = event.target.name;
@@ -39,14 +48,13 @@ export default function CreateForm(props: Readonly<Props>) {
     const category4Budget: any = useRef()
 
     function checkCoverage(): void {
-        console.log("check coverage was called")
         const sumOfCategoryBudgets: number = parseInt(
-                category0Budget.current.value) +
-            parseInt(category1Budget.current.value) +
-            parseInt(category2Budget.current.value) +
-            parseInt(category3Budget.current.value) +
-            parseInt(category4Budget.current.value)
-        console.log("sumOfCategoryBudgets: ", sumOfCategoryBudgets)
+                category0Budget.current.value || "0" ) +
+            parseInt(category1Budget.current.value || "0") +
+            parseInt(category2Budget.current.value || "0") +
+            parseInt(category3Budget.current.value || "0") +
+            parseInt(category4Budget.current.value || "0")
+        console.log("sumOfCategoryBudgets > totalBudget: ", sumOfCategoryBudgets > totalBudget)
         if (!budgetExceeded && sumOfCategoryBudgets > totalBudget) {
             setBudgetExceeded(true)
         }
@@ -92,7 +100,7 @@ export default function CreateForm(props: Readonly<Props>) {
             input</label>
         <input id={"total-budget-input"} value={totalBudget}
                onChange={handleChangeTotalBudget}/>
-        {budgetExceeded && <p>Total budget exceeded</p>}
+        {budgetExceeded && <p id={"budget-exceeded"}>Total budget exceeded.</p>}
         <form onSubmit={createMonthPlan}>
             <div className={"category-wrapper"}>
                 <label className={"hidden"} htmlFor={"category0-name"}>Name
