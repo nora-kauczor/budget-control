@@ -51,7 +51,6 @@ function App() {
     }
 
     function updateMonthPlan(): void {
-        console.log("called")
         axios.get("/api/budget")
             .then(response => setMonthPlan(response.data))
             .catch((error) => {
@@ -61,7 +60,6 @@ function App() {
 
     return (<div id={"app"}>
         <Header/>
-
         <Routes>
             <Route path={"/login"}
                    element={<LoginPage
