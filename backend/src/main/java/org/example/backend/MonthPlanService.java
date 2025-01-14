@@ -28,10 +28,13 @@ public class MonthPlanService {
 
     public MonthPlan getCurrentMonthPlan(String user) {
         String currentYearMonth = YearMonth.now().toString();
+        System.out.println("currentYearMonth: "+currentYearMonth+", user: "+user);
+        System.out.println(monthPlanRepo.existsByYearMonthAndUser(user, currentYearMonth));
         if (monthPlanRepo.existsByYearMonthAndUser(user, currentYearMonth)) {
             return monthPlanRepo.findByYearMonthAndUser(user, currentYearMonth);
-        } else {
-            throw new NoSuchElementException();
+        }
+        else {
+            throw  new NoSuchElementException();
         }
     }
 

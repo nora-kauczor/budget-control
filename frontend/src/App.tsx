@@ -17,12 +17,11 @@ function App() {
 
     useEffect(() => {
         updateUser()
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         if (!user) {navigate("/login")}
     }, [user]);
-
 
     useEffect(() => {
         if (user) {
@@ -52,6 +51,7 @@ function App() {
     }
 
     function updateMonthPlan(): void {
+        console.log("called")
         axios.get("/api/budget")
             .then(response => setMonthPlan(response.data))
             .catch((error) => {

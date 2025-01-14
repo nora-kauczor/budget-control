@@ -9,5 +9,7 @@ public interface MonthPlanRepo extends MongoRepository<MonthPlan, String> {
 
     MonthPlan findByYearMonthAndUser(String user, String yearMonth);
 
-    boolean existsByYearMonthAndUser(String user, String currentYearMonth);
+    boolean existsByYearMonthAndUser(String user, String yearMonth);
+
+
 }
