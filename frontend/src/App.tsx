@@ -5,9 +5,11 @@ import HomePage from "./pages/HomePage/HomePage.tsx";
 import Header from "./components/Header/Header.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import {MonthPlan} from "./types/MonthPlan.ts";
-import EditPage from "./pages/EditPage/EditPage.tsx";
+import FormPage from "./pages/FormPage/FormPage.tsx";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import CreateForm from "./components/CreateForm/CreateForm.tsx";
+import EditForm from "./components/EditForm/EditForm.tsx";
 
 
 function App() {
@@ -68,7 +70,11 @@ function App() {
                    />}/>
             <Route path={"/"} element={<HomePage
                 monthPlan={monthPlan ? monthPlan : undefined}/>}/>
-            <Route path={"/form"} element={<EditPage monthPlan={monthPlan}
+            {/*<Route path={"/form"} element={<FormPage monthPlan={monthPlan}*/}
+            {/*                                         setMonthPlan={setMonthPlan}/>}/>*/}
+            <Route path={"/create"} element={<CreateForm monthPlan={monthPlan}
+                                                     setMonthPlan={setMonthPlan}/>}/>
+            <Route path={"/edit"} element={<EditForm monthPlan={monthPlan}
                                                      setMonthPlan={setMonthPlan}/>}/>
         </Routes>
         <Footer logout={logout}/>

@@ -15,7 +15,7 @@ export default function Header() {
             </li>
             <li className={"header-item"} >
                 <button className={"header-item-button"}
-                        onClick={()=>navigate("/form")}>form</button>
+                        onClick={()=>navigate("/create")}>create</button>
             </li>
         </ul>
    )

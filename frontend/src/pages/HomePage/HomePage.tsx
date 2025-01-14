@@ -9,6 +9,8 @@ type Props = {
 export default function HomePage(props: Readonly<Props>) {
     const navigate = useNavigate()
 
+    // TODO architektur mit unterschiedlichen forms/ wegen dorthin
+    //  // und wo das zu editierende zwischengespeichert wird falls zwischengespecihert werden muss
 
     if (!props.monthPlan) {
         return (<main>
@@ -23,6 +25,7 @@ export default function HomePage(props: Readonly<Props>) {
         <p>{props.monthPlan.totalBudget.toFixed(2)}€
             of {props.monthPlan.totalBudget.toFixed(2)}€ left</p>
         <PieChart monthPlan={props.monthPlan}/>
+        <button onClick={()=>navigate("/form")}>Edit 🖊️</button>
     </main>)
 
 }
