@@ -1,7 +1,9 @@
 import {MonthPlan} from "../../types/MonthPlan.ts";
 import axios from "axios";
 import {MonthPlanDTO} from "../../types/MonthPlanDTO.ts";
-import {useRef, useState} from "react";
+import { useRef, useState} from "react";
+import {uid} from "uid";
+
 
 type Props = {
     setMonthPlan: React.Dispatch<React.SetStateAction<MonthPlan>>
@@ -13,13 +15,9 @@ export default function CreateForm(props: Readonly<Props>) {
     const [totalBudget, setTotalBudget] = useState<number>(0)
     const [budgetExceeded, setBudgetExceeded] = useState<boolean>(false)
 
-    function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    function handleChangeSelection(event: React.ChangeEvent<HTMLSelectElement>) {
         const source = event.target.name;
         const data = new InputEvent(event.target.value);
-        if (source === "total-budget-input") {
-            setTotalBudget(parseInt(data));
-            return;
-        }
         const value: string = data.type;
         if (source === "month-input") {
             setMonthInput(value)
@@ -30,6 +28,10 @@ export default function CreateForm(props: Readonly<Props>) {
         checkCoverage()
     }
 
+    function handleChangeTotalBudget(event: React.ChangeEvent<HTMLInputElement>){
+        setTotalBudget(Number(event.target.value))
+    }
+
     const category0Budget: any = useRef()
     const category1Budget: any = useRef()
     const category2Budget: any = useRef()
@@ -37,12 +39,14 @@ export default function CreateForm(props: Readonly<Props>) {
     const category4Budget: any = useRef()
 
     function checkCoverage(): void {
+        console.log("check coverage was called")
         const sumOfCategoryBudgets: number = parseInt(
                 category0Budget.current.value) +
             parseInt(category1Budget.current.value) +
             parseInt(category2Budget.current.value) +
             parseInt(category3Budget.current.value) +
             parseInt(category4Budget.current.value)
+        console.log("sumOfCategoryBudgets: ", sumOfCategoryBudgets)
         if (!budgetExceeded && sumOfCategoryBudgets > totalBudget) {
             setBudgetExceeded(true)
         }
@@ -76,18 +80,18 @@ export default function CreateForm(props: Readonly<Props>) {
     return (<main>
         <p>Pick month and year</p>
         <label className={"hidden"} htmlFor={"month-input"}>month input</label>
-        <select id={"month-input"} value={monthInput} onChange={handleChange}>
-            {months.map(month => <option>{month}</option>)}
+        <select id={"month-input"} value={monthInput} onChange={handleChangeSelection}>
+            {months.map(month => <option key={uid()}>{month}</option>)}
         </select>
         <label className={"hidden"} htmlFor={"year-input"}>year input</label>
-        <select id={"year-input"} value={yearInput} onChange={handleChange}>
-            {years.map(year => <option>{year}</option>)}
+        <select id={"year-input"} value={yearInput} onChange={handleChangeSelection}>
+            {years.map(year => <option key={uid()}>{year}</option>)}
         </select>
         <p>Set your total budget:</p>
         <label className={"hidden"} htmlFor={"total-budget-input"}>total budget
             input</label>
         <input id={"total-budget-input"} value={totalBudget}
-               onChange={handleChange}/>
+               onChange={handleChangeTotalBudget}/>
         {budgetExceeded && <p>Total budget exceeded</p>}
         <form onSubmit={createMonthPlan}>
             <div className={"category-wrapper"}>
@@ -99,8 +103,8 @@ export default function CreateForm(props: Readonly<Props>) {
                     of category 0</label>
                 <input className={"category-budget"}
                        name={"category0-budget"}
-                       ref={category0Budget}/>
-
+                       ref={category0Budget}
+                       onChange={checkCoverage}/>
             </div>
             <div className={"category-wrapper"}>
                 <label className={"hidden"} htmlFor={"category1-name"}>Name
@@ -112,6 +116,8 @@ export default function CreateForm(props: Readonly<Props>) {
                     of category 1</label>
                 <input className={"category-budget"}
                        name={"category1-budget"}
+                       ref={category1Budget}
+                       onChange={checkCoverage}
                 />
             </div>
             <div className={"category-wrapper"}>
@@ -124,6 +130,8 @@ export default function CreateForm(props: Readonly<Props>) {
                     of category 2</label>
                 <input className={"category-budget"}
                        name={"category2-budget"}
+                       ref={category2Budget}
+                       onChange={checkCoverage}
                 />
             </div>
             <div className={"category-wrapper"}>
@@ -136,6 +144,8 @@ export default function CreateForm(props: Readonly<Props>) {
                     of category 3</label>
                 <input className={"category-budget"}
                        name={"category3-budget"}
+                       ref={category3Budget}
+                       onChange={checkCoverage}
                 />
             </div>
             <div className={"category-wrapper"}>
@@ -148,6 +158,8 @@ export default function CreateForm(props: Readonly<Props>) {
                     of category 4</label>
                 <input className={"category-budget"}
                        name={"category4-budget"}
+                       ref={category4Budget}
+                       onChange={checkCoverage}
                 />
 
             </div>
