@@ -1,7 +1,6 @@
 export type MonthPlanDTO = {
     yearMonth:string,
-    totalBudget:number,
-    categoryPlans: CategoryPlanDTO[],
+    categoryPlanDTOs: CategoryPlanDTO[],
 }
 
 export type CategoryPlanDTO = {

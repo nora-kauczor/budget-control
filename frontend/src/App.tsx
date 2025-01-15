@@ -19,18 +19,18 @@ function App() {
 
     useEffect(() => {
         updateUser()
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            updateMonthPlan()
+        }
     }, [user]);
 
     useEffect(() => {
         if (!user) {navigate("/login")}
     }, [user]);
 
-    useEffect(() => {
-        if (user) {
-            updateMonthPlan()
-        }
-        // else { navigate("/login")}
-    }, [user]);
 
     function updateUser(): void {
         axios.get("/api/auth")

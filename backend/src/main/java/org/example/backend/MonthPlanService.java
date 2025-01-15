@@ -42,6 +42,7 @@ public class MonthPlanService {
 
 
     public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) throws MonthPlanAlreadyExistsException {
+        System.out.println("PRINT: "+monthPlanDTO.categoryPlanDTOs());
         boolean monthPlanAlreadyExists = monthPlanRepo.existsByYearMonthAndUser(monthPlanDTO.yearMonth(), user);
         if (monthPlanAlreadyExists) {
             throw new MonthPlanAlreadyExistsException("Cannot create month plan because month plan for this month already exists.");

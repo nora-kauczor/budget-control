@@ -11,31 +11,38 @@ type Props = {
 }
 
 export default function CreateForm(props: Readonly<Props>) {
-    const [monthInput, setMonthInput] = useState<string>("")
-    const [yearInput, setYearInput] = useState<string>("")
+
+    const months: string[] = ["01", "02", "03", "04", "05", "06", "07", "08",
+        "09", "10", "11", "12"]
+    const currentMonthNumber:number = new Date().getMonth()+1
+    const currentMonth:string = currentMonthNumber>9 ? currentMonthNumber.toString() :
+        "0"+currentMonthNumber.toString()
+    const currentYear:number = new Date().getFullYear()
+    const endYear = currentYear + 10;
+    const years: string[] = [];
+    for (let y: number = currentYear; y <= endYear; y++) {
+        years.push(String(y))
+    }
+    const [monthInput, setMonthInput] = useState<string>(currentMonth)
+    const [yearInput, setYearInput] = useState<string>(currentYear.toString())
     const [totalBudget, setTotalBudget] = useState<number>(0)
     const [budgetExceeded, setBudgetExceeded] = useState<boolean>(false)
-
-    console.log("budgetExceeded: ", budgetExceeded)
-
-// Anzeige von budget exceeded soll aktualisiert werden wenn on
 
     useEffect(() => {
         checkCoverage()
     }, [totalBudget]);
 
     function handleChangeSelection(event: React.ChangeEvent<HTMLSelectElement>) {
-        const source = event.target.name;
-        const data = new InputEvent(event.target.value);
-        const value: string = data.type;
-        if (source === "month-input") {
+        const { name, value } = event.target;
+        if (name === "month-input") {
             setMonthInput(value)
         }
-        if (source === "year-input") {
+        if (name === "year-input") {
             setYearInput(value)
         }
         checkCoverage()
     }
+
 
     function handleChangeTotalBudget(event: React.ChangeEvent<HTMLInputElement>){
         setTotalBudget(Number(event.target.value))
@@ -54,7 +61,6 @@ export default function CreateForm(props: Readonly<Props>) {
             parseInt(category2Budget.current.value || "0") +
             parseInt(category3Budget.current.value || "0") +
             parseInt(category4Budget.current.value || "0")
-        console.log("sumOfCategoryBudgets > totalBudget: ", sumOfCategoryBudgets > totalBudget)
         if (!budgetExceeded && sumOfCategoryBudgets > totalBudget) {
             setBudgetExceeded(true)
         }
@@ -64,115 +70,123 @@ export default function CreateForm(props: Readonly<Props>) {
     }
 
     function createMonthPlan(event: React.ChangeEvent<HTMLFormElement>) {
-        const data: any = event.target.value;
-        console.log(data)
-        // const newMonthPlan: MonthPlanDTO = {
-        //     yearMonth: yearInput+" "+monthInput,
-        // }
-        // axios.put("/api/budget", newMonthPlan)
-        //     .then(response => props.setMonthPlan(response.data))
-        //     .catch((error) => {
-        //         console.error("Error fetching data:", error);
-        //     })
+        event.preventDefault()
+        const formData = new FormData(event.target);
+        const data  = Object.fromEntries(formData);
+        const newMonthPlan: MonthPlanDTO = {
+            yearMonth: yearInput+"-"+monthInput,
+            categoryPlanDTOs:[
+                {category:data.category0Name.toString(), categoryBudget: Number(data.category0Budget)},
+                {category:data.category1Name.toString(), categoryBudget: Number(data.category1Budget)},
+                {category:data.category2Name.toString(), categoryBudget: Number(data.category2Budget)},
+                {category:data.category3Name.toString(), categoryBudget: Number(data.category3Budget)},
+                {category:data.category4Name.toString(), categoryBudget: Number(data.category4Budget)}
+            ]
+        }
+        console.log(newMonthPlan)
+        axios.post("/api/budget", newMonthPlan)
+            .then(response => props.setMonthPlan(response.data))
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            })
     }
 
-    const months: string[] = ["01", "02", "03", "04", "05", "06", "07", "08",
-        "09", "10", "11", "12"]
-    const currentYear = new Date().getFullYear();
-    const endYear = currentYear + 10;
-    const years: string[] = [];
-    for (let y: number = currentYear; y <= endYear; y++) {
-        years.push(String(y))
-    }
 
-    return (<main>
-        <p>Pick month and year</p>
-        <label className={"hidden"} htmlFor={"month-input"}>month input</label>
-        <select id={"month-input"} value={monthInput} onChange={handleChangeSelection}>
+
+    return (<main id={"create-form"}>
+        <p>1. Pick month and year</p>
+        <label htmlFor={"month-input"} className={"hidden"}>month input</label>
+        <select id={"month-input"} name={"month-input"} value={monthInput} onChange={handleChangeSelection}>
             {months.map(month => <option key={uid()}>{month}</option>)}
         </select>
-        <label className={"hidden"} htmlFor={"year-input"}>year input</label>
-        <select id={"year-input"} value={yearInput} onChange={handleChangeSelection}>
+        <label htmlFor={"year-input"} className={"hidden"}>year input</label>
+        <select id={"year-input"} name={"year-input"} value={yearInput} onChange={handleChangeSelection}>
             {years.map(year => <option key={uid()}>{year}</option>)}
         </select>
-        <p>Set your total budget:</p>
-        <label className={"hidden"} htmlFor={"total-budget-input"}>total budget
+        <p>2. Set your total budget:</p>
+        <label htmlFor={"total-budget-input"}>total budget
             input</label>
         <input id={"total-budget-input"} value={totalBudget}
                onChange={handleChangeTotalBudget}/>
         {budgetExceeded && <p id={"budget-exceeded"}>Total budget exceeded.</p>}
+        <p>3. Split up your budget in five self-defined categories</p>
         <form onSubmit={createMonthPlan}>
             <div className={"category-wrapper"}>
-                <label className={"hidden"} htmlFor={"category0-name"}>Name
-                    of category 0</label>
-                <input className={"category0-name"}
-                       name={"category0-name"}/>
-                <label className={"hidden"} htmlFor={"category0-budget"}>Budget
-                    of category 0</label>
-                <input className={"category-budget"}
-                       name={"category0-budget"}
-                       ref={category0Budget}
-                       onChange={checkCoverage}/>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category0Name"}>
+                        category</label>
+                    <input className={"category-name"}
+                           name={"category0Name"}/>
+                </div>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category0Budget"}>budget</label>
+                    <input className={"category-budget"}
+                           name={"category0Budget"}
+                           ref={category0Budget}
+                           onChange={checkCoverage}/>
+                </div>
             </div>
             <div className={"category-wrapper"}>
-                <label className={"hidden"} htmlFor={"category1-name"}>Name
-                    of category 1</label>
-                <input className={"category-name"}
-                       name={"category1-name"}
-                />
-                <label className={"hidden"} htmlFor={"category1-budget"}>Budget
-                    of category 1</label>
-                <input className={"category-budget"}
-                       name={"category1-budget"}
-                       ref={category1Budget}
-                       onChange={checkCoverage}
-                />
-            </div>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category1Name"}>category</label>
+                    <input className={"category-name"}
+                           name={"category1Name"}
+                    />
+                </div>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category1Budget"}>budget</label>
+                    <input className={"category-budget"}
+                           name={"category1Budget"}
+                           ref={category1Budget}
+                           onChange={checkCoverage}
+                    />
+                </div>
+                </div>
             <div className={"category-wrapper"}>
-                <label className={"hidden"} htmlFor={"category2-name"}>Name
-                    of category 2</label>
-                <input className={"category-name"}
-                       name={"category2-name"}
-                />
-                <label className={"hidden"} htmlFor={"category2-budget"}>Budget
-                    of category 2</label>
-                <input className={"category-budget"}
-                       name={"category2-budget"}
-                       ref={category2Budget}
-                       onChange={checkCoverage}
-                />
-            </div>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category2Name"}>category</label>
+                    <input className={"category-name"}
+                           name={"category2Name"}
+                    /></div>
+                    <div className={"input-and-label-wrapper"}>
+                        <label htmlFor={"category2Budget"}>budget</label>
+                        <input className={"category-budget"}
+                               name={"category2Budget"}
+                               ref={category2Budget}
+                               onChange={checkCoverage}
+                        /></div>
+                    </div>
             <div className={"category-wrapper"}>
-                <label className={"hidden"} htmlFor={"category3-name"}>Name
-                    of category 3</label>
-                <input className={"category-name"}
-                       name={"category3-name"}
-                />
-                <label className={"hidden"} htmlFor={"category3-budget"}>Budget
-                    of category 3</label>
-                <input className={"category-budget"}
-                       name={"category3-budget"}
-                       ref={category3Budget}
-                       onChange={checkCoverage}
-                />
-            </div>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category3Name"}>category</label>
+                    <input className={"category-name"}
+                           name={"category3Name"}
+                    /></div>
+                    <div className={"input-and-label-wrapper"}>
+                        <label htmlFor={"category3Budget"}>budget</label>
+                        <input className={"category-budget"}
+                               name={"category3Budget"}
+                               ref={category3Budget}
+                               onChange={checkCoverage}
+                        /></div>
+                    </div>
             <div className={"category-wrapper"}>
-                <label className={"hidden"} htmlFor={"category4-name"}>Name
-                    of category 4</label>
-                <input className={"category-name"}
-                       name={"category4-name"}
-                />
-                <label className={"hidden"} htmlFor={"category4-budget"}>Budget
-                    of category 4</label>
-                <input className={"category-budget"}
-                       name={"category4-budget"}
-                       ref={category4Budget}
-                       onChange={checkCoverage}
-                />
-
-            </div>
-            <button type={"submit"}>Save changes</button>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category4Name"}>category</label>
+                    <input className={"category-name"}
+                           name={"category4Name"}
+                    /></div>
+                <div className={"input-and-label-wrapper"}>
+                    <label htmlFor={"category4Budget"}>budget</label>
+                    <input className={"category-budget"}
+                           name={"category4Budget"}
+                           ref={category4Budget}
+                           onChange={checkCoverage}
+                    />
+                </div>
+                </div>
+                <button type={"submit"}>Save</button>
         </form>
-
-    </main>)
+    </main>
+)
 }
