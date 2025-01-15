@@ -7,7 +7,8 @@ import java.util.List;
 public interface MonthPlanRepo extends MongoRepository<MonthPlan, String> {
     List<MonthPlan> findByUser(String user);
 
-    MonthPlan findByYearMonthAndUser(String user, String yearMonth);
+    MonthPlan findByYearMonthAndUser(String yearMonth, String user);
 
-    boolean existsByYearMonthAndUser(String user, String currentYearMonth);
+    boolean existsByYearMonthAndUser(String yearMonth, String user);
+
 }

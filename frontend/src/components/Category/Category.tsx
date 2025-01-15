@@ -13,10 +13,10 @@
 //
 //     return (<li>
 //         <label className={"hidden"}>{props.category}</label>
-//         <input className={"category-input"} value={props.category} onChange={props.handleChangeCategoryInput}/>
+//         <input className={"category-budget"} value={props.category} onChange={props.handleChangeCategoryInput}/>
 //         <div>
 //             <label className={"hidden"}>{props.budget}</label>
-//             <input className={"budget-input"} value={props.budget}
+//             <input className={"budget-budget"} value={props.budget}
 //             onChange={props.handleChangeBudgetInput}/>
 //             {props.exceedsBudget && <p>Entered total exceeds budget</p>}
 //         </div>

@@ -1,4 +1,22 @@
-footer {
-    width: 100%;
-    background-color: lightgoldenrodyellow;
+.footer-ul {
+    background-color: var(--header-footer-color);
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 7vh;
+    max-height: 70px;
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+}
+
+.footer-li {
+    display: flex;
+    align-content: center;
+}
+
+.footer-button {
+    border: none;
+    background-color: var(--header-footer-color);
 }

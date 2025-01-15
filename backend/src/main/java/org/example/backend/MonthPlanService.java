@@ -28,10 +28,11 @@ public class MonthPlanService {
 
     public MonthPlan getCurrentMonthPlan(String user) {
         String currentYearMonth = YearMonth.now().toString();
-        if (monthPlanRepo.existsByYearMonthAndUser(user, currentYearMonth)) {
-            return monthPlanRepo.findByYearMonthAndUser(user, currentYearMonth);
-        } else {
-            throw new NoSuchElementException();
+        if (monthPlanRepo.existsByYearMonthAndUser(currentYearMonth, user)) {
+            return monthPlanRepo.findByYearMonthAndUser(currentYearMonth, user);
+        }
+        else {
+            throw  new NoSuchElementException();
         }
     }
 
@@ -39,8 +40,8 @@ public class MonthPlanService {
         return monthPlanRepo.findByUser(user);
     }
 
-
     public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) throws MonthPlanAlreadyExistsException {
+        System.out.println("PRINT: "+monthPlanDTO.categoryPlanDTOs());
         boolean monthPlanAlreadyExists = monthPlanRepo.existsByYearMonthAndUser(monthPlanDTO.yearMonth(), user);
         if (monthPlanAlreadyExists) {
             throw new MonthPlanAlreadyExistsException("Cannot create month plan because month plan for this month already exists.");
@@ -53,9 +54,13 @@ public class MonthPlanService {
                 categoryPlans.add(categoryPlan);
             }
         }
+        assert monthPlanDTO.categoryPlanDTOs() != null;
+        double totalBudget = monthPlanDTO.categoryPlanDTOs().stream()
+                .mapToDouble(CategoryPlanDTO::categoryBudget)
+                .sum();
         MonthPlan newMonthPlan = new MonthPlan(null, user,
-                monthPlanDTO.yearMonth(), monthPlanDTO.totalBudget(),
-                monthPlanDTO.totalBudget(), categoryPlans,
+                monthPlanDTO.yearMonth(), totalBudget,
+                totalBudget, categoryPlans,
                 new ArrayList<>());
         return monthPlanRepo.save(newMonthPlan);
     }
@@ -92,7 +97,6 @@ public class MonthPlanService {
                 .mapToDouble(Transaction::amount)
                 .sum();
     }
-
 
     public String deleteMonthPlan(String user, String id) throws UserIsNotAuthorizedException, IdNotFoundException {
         String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow(() -> new IdNotFoundException("Id not found.")).user();
