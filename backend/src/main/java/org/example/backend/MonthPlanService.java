@@ -40,7 +40,6 @@ public class MonthPlanService {
         return monthPlanRepo.findByUser(user);
     }
 
-
     public MonthPlan createMonthPlan(String user, MonthPlanDTO monthPlanDTO) throws MonthPlanAlreadyExistsException {
         System.out.println("PRINT: "+monthPlanDTO.categoryPlanDTOs());
         boolean monthPlanAlreadyExists = monthPlanRepo.existsByYearMonthAndUser(monthPlanDTO.yearMonth(), user);
@@ -98,7 +97,6 @@ public class MonthPlanService {
                 .mapToDouble(Transaction::amount)
                 .sum();
     }
-
 
     public String deleteMonthPlan(String user, String id) throws UserIsNotAuthorizedException, IdNotFoundException {
         String authorOfMonthPlan = monthPlanRepo.findById(id).orElseThrow(() -> new IdNotFoundException("Id not found.")).user();

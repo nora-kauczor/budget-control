@@ -47,10 +47,10 @@ class MonthPlanServiceTest {
         MonthPlan testMonthPlan = new MonthPlan("123", "000",
                 currentYearMonth, 3000.00,
                 2000.00, List.of(), List.of());
-        when(mockedRepo.existsByYearMonthAndUser("000",
-                currentYearMonth)).thenReturn(true);
-        when(mockedRepo.findByYearMonthAndUser("000",
-                currentYearMonth)).thenReturn(testMonthPlan);
+        when(mockedRepo.existsByYearMonthAndUser(
+                currentYearMonth, "000")).thenReturn(true);
+        when(mockedRepo.findByYearMonthAndUser(currentYearMonth, "000"))
+                .thenReturn(testMonthPlan);
         assertEquals(testMonthPlan, monthPlanService.getCurrentMonthPlan("000"));
     }
 
